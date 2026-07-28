@@ -41,6 +41,11 @@ const idx = proj.getTodoListById("heylist2");
 proj._todoListArray[idx].title = "HEYYY OHHHH!!!!!!!!!!!";
 printArray();
 
-
+//Add new TodoList
 proj.todoListArray.push(new TodoList("bob","booob"))
+printArray();
+
+const a = proj._todoListArray[proj.getTodoListById("heylist2")];
+const b =proj._todoListArray[proj.getTodoListById("bob")];
+proj.moveTask(a,b,"td1");
 printArray();
