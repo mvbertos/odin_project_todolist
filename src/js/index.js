@@ -9,6 +9,16 @@ ui.addTodoList("hello", [
   new Todo("td2", "world"),
   new Todo("td3", "what?"),
 ]);
+ui.addTodoList("hello", [
+  new Todo("td1", "hello"),
+  new Todo("td2", "world"),
+  new Todo("td3", "what?"),
+]);
+ui.addTodoList("hello", [
+  new Todo("td1", "hello"),
+  new Todo("td2", "world"),
+  new Todo("td3", "what?"),
+]);
 
 //Debug
 // const todoList1 = new TodoList("heyList", "This is My Title", [
