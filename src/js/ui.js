@@ -14,6 +14,7 @@ class UI {
     this.todolist.id = "todoList";
 
     this.footer = document.createElement("footer");
+    this.footer.textContent = "made by logout";
 
     // todolist.appendChild(todolistCard);
     this.content.append(this.header, this.todolist, this.footer);
