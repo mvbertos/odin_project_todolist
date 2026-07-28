@@ -5,8 +5,8 @@ class Todo {
     description = "",
     dueDate = "",
     priority = "",
-    notes = [],
-    checklist = [],
+    notes = [""],
+    checklist = [""],
   ) {
     this._id = id;
     this.title = title;

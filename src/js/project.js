@@ -1,7 +1,7 @@
 import { Todo } from "./todo";
 
 class Project {
-  constructor(title = "", desc = "", todoArray = []) {
+  constructor(title = "", desc = "", todoArray = [new Todo()]) {
     this.title = title;
     this.desc = desc;
     this._todoArray = todoArray;
@@ -31,26 +31,14 @@ class Project {
       }
       this._todoArray.splice(value, 1);
     } else {
-      const index = this._findItem(this._todoArray, value);
+      const index = this.findItem(value);
       this._todoArray.splice(index, 1);
     }
   }
 
-  editTodo(value, newTodo) {
-    if (Number.isInteger(value)) {
-      if (value < -1 && value < this._todoArray.length) {
-        console.error("invalid index");
-      }
-      this._todoArray[value] = newTodo;
-    } else {
-      const index = this._findItem(this._todoArray, value);
-      this._todoArray[index] = newTodo;
-    }
-  }
-
-  _findItem(array, id) {
-    for (let index = 0; index < array.length; index++) {
-      const element = array[index];
+  findItem(id) {
+    for (let index = 0; index < this.todoArray.length; index++) {
+      const element = this.todoArray[index];
       if (element.id == id) {
         return index;
       }

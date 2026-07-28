@@ -31,14 +31,10 @@ printArray();
 proj.removeTodo("steven");
 proj.removeTodo(0);
 printArray();
-proj.editTodo(
-  0,
-  new Todo(
-    "hello_world",
-    "hello World",
-    "It's funny to see you here isn't it?",
-  ),
-);
+let idx = proj.findItem("heyy-ohh");
+proj.todoArray[idx].title = "HEYYY OHHHH!!!!!!!!!!!"
+
+
 printArray();
 proj.title = "hey jerry!";
 printArray();
