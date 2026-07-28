@@ -1,25 +1,29 @@
 import { Project } from "./project";
 import { Todo } from "./todo";
+import { TodoList } from "./todo_list";
 
 console.log("hello world");
 
-const proj = new Project("hello world", "just testing mate");
-proj.addTodo(new Todo("heyy-ohh", "Heyy Ohhh!", "just sayin' hey"));
-proj.addTodo(new Todo("steven", "steven!", "just sayin' hey"));
-proj.addTodo(
-  new Todo(
-    "my name is jeff",
-    "My name is jeff movie",
-    "I guess no one remembers this movie anymore",
-  ),
-);
+const todoList1 = new TodoList("heyList", "This is My Title", [
+  new Todo("td1", "Todo1"),
+  new Todo("td2", "Todo2"),
+]);
+
+const todoList2 = new TodoList("heylist2", "This is My Title Second", [
+  new Todo("td1", "Todo1"),
+  new Todo("td2", "Todo2"),
+]);
+const proj = new Project("hello world", "just testing mate", [
+  todoList1,
+  todoList2,
+]);
 
 function printArray() {
   console.log(`Project: ${proj.title}`);
   console.log(
     "#################### Printing the whole todo list right here! ####################",
   );
-  proj.todoArray.forEach((el) => {
+  proj._todoListArray.forEach((el) => {
     console.log(el);
   });
   console.log(
@@ -27,14 +31,16 @@ function printArray() {
   );
 }
 
+//Removing
 printArray();
-proj.removeTodo("steven");
-proj.removeTodo(0);
+proj.removeTodoList("heyList");
 printArray();
-let idx = proj.findItem("heyy-ohh");
-proj.todoArray[idx].title = "HEYYY OHHHH!!!!!!!!!!!"
+
+//Editing
+const idx = proj.getTodoListById("heylist2");
+proj._todoListArray[idx].title = "HEYYY OHHHH!!!!!!!!!!!";
+printArray();
 
 
-printArray();
-proj.title = "hey jerry!";
+proj.todoListArray.push(new TodoList("bob","booob"))
 printArray();
