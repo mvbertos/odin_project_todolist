@@ -137,7 +137,20 @@ class UI {
   ) {
     const taskDivEl = document.createElement("div");
     taskDivEl.id = "taskEl";
+
+    const checkBoxEl = document.createElement("input");
+    checkBoxEl.type = "checkbox";
+    checkBoxEl.checked = task.done;
+    checkBoxEl.addEventListener("change", (e) => {
+      task.done = checkBoxEl.checked;
+      onChanged(task);
+    });
+    taskDivEl.appendChild(checkBoxEl);
+
     const taskButtonEl = document.createElement("button");
+    if (task.done) {
+      taskButtonEl.id += "dashed";
+    }
     taskButtonEl.textContent = task.title;
     taskButtonEl.addEventListener("click", (_) => {
       this._createTaskEditForm(task, (newTask) => {
@@ -145,6 +158,7 @@ class UI {
       });
     });
     taskDivEl.appendChild(taskButtonEl);
+
     const removeButtonEl = document.createElement("button");
     removeButtonEl.id = "del";
     removeButtonEl.textContent = "X";

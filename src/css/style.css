@@ -56,7 +56,13 @@ body {
 
 #todoListCard #taskEl {
   display: grid;
-  grid-template-columns: 1fr min-content;
+  gap: 5px;
+  grid-template-columns:
+    12px 1fr min-content;
+}
+
+#taskEl #dashed {
+  text-decoration: line-through;
 }
 
 #newTask {

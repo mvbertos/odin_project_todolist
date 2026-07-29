@@ -7,6 +7,7 @@ class Todo {
     priority = "",
     notes = [""],
     checklist = [""],
+    done = false,
   ) {
     this._id = id;
     this.title = title;
@@ -15,6 +16,7 @@ class Todo {
     this.priority = priority;
     this.notes = notes;
     this.checklist = checklist;
+    this.done = done;
   }
 
   get id() {
