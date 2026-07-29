@@ -4,16 +4,16 @@ class TodoList {
   constructor(id = "", title = "", todo_array = [new Todo()]) {
     this._id = id;
     this.title = title;
-    this._todoArray = todo_array;
+    this.todoArray = todo_array;
   }
 
   get id(){
     return this._id;
   }
 
-  get todoArray() {
-    return this._todoArray;
-  }
+  // get todoArray() {
+  //   return this._todoArray;
+  // }
 
   addTodo(newTodo) {
     if (newTodo instanceof Todo) {

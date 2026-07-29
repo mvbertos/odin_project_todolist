@@ -4,21 +4,37 @@ import { TodoList } from "./todo_list";
 import { UI } from "./ui";
 
 const ui = new UI();
-ui.addTodoList("hello", [
-  new Todo("td1", "hello"),
-  new Todo("td2", "world"),
-  new Todo("td3", "what?"),
-]);
-ui.addTodoList("hello", [
-  new Todo("td1", "hello"),
-  new Todo("td2", "world"),
-  new Todo("td3", "what?"),
-]);
-ui.addTodoList("hello", [
-  new Todo("td1", "hello"),
-  new Todo("td2", "world"),
-  new Todo("td3", "what?"),
-]);
+
+const todoListArray = [
+  new TodoList("helloWorld", "Maggot", [
+    new Todo("td1", "hello"),
+    new Todo("td2", "world"),
+    new Todo("td3", "what?"),
+  ]),
+  new TodoList("helloWorld1", "Fox", [
+    new Todo("td1", "hello"),
+    new Todo("td2", "world"),
+    new Todo("td3", "what?"),
+  ]),
+  new TodoList("helloWorld2", "Devil", [
+    new Todo("td1", "hello"),
+    new Todo("td2", "world"),
+    new Todo("td3", "what?"),
+  ]),
+];
+
+function createTodoLists() {
+  ui.clearTodoList();
+  for (let i = 0; i < todoListArray.length; i++) {
+    const e = todoListArray[i];
+    ui.drawTodoList(e.title, e.todoArray, (nta) => {
+      e.todoArray = nta;
+      createTodoLists();
+    });
+  }
+}
+
+createTodoLists();
 
 //Debug
 // const todoList1 = new TodoList("heyList", "This is My Title", [
