@@ -27,8 +27,8 @@ function createTodoLists() {
   ui.clearTodoList();
   for (let i = 0; i < todoListArray.length; i++) {
     const e = todoListArray[i];
-    ui.drawTodoList(e.title, e.todoArray, (nta) => {
-      e.todoArray = nta;
+    ui.displayTodoList(e, (newTodoList) => {
+      todoListArray[i] = newTodoList;
       createTodoLists();
     });
   }

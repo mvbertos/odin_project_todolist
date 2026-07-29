@@ -1,5 +1,6 @@
 import "../css/style.css";
 import { Todo } from "./todo";
+import { TodoList } from "./todo_list";
 
 class UI {
   constructor() {
@@ -11,13 +12,13 @@ class UI {
     headerLabel.textContent = "Todo List";
     this.header.appendChild(headerLabel);
 
-    this.todolist = document.createElement("div");
-    this.todolist.id = "todoList";
+    this.todolistDivEl = document.createElement("div");
+    this.todolistDivEl.id = "todoList";
 
     this.footer = document.createElement("footer");
     this.footer.textContent = "made by logout";
 
-    this.content.append(this.header, this.todolist, this.footer);
+    this.content.append(this.header, this.todolistDivEl, this.footer);
   }
 
   _createTaskEditForm(task, onSubmit = (newTask) => {}) {
@@ -85,31 +86,46 @@ class UI {
   }
 
   clearTodoList() {
-    this.todolist.innerHTML = "";
+    this.todolistDivEl.innerHTML = "";
   }
 
-  drawTodoList(title = "", taskArray = [], onUpdate = (newTaskArray) => {}) {
+  displayTodoList(todoList = new TodoList(), onChanged = (newTodoList) => {}) {
     const todoListCard = document.createElement("div");
     todoListCard.id = "todoListCard";
 
     const titleEl = document.createElement("h2");
-    titleEl.textContent = title;
+    titleEl.textContent = todoList.title;
 
     todoListCard.append(titleEl);
-    this.todolist.append(todoListCard);
+    this.todolistDivEl.append(todoListCard);
 
-    for (let i = 0; i < taskArray.length; i++) {
-      const task = taskArray[i];
-      const todoEl = document.createElement("button");
-      todoEl.textContent = task.title;
-      todoListCard.appendChild(todoEl);
-      todoEl.addEventListener("click", (_) => {
-        this._createTaskEditForm(task, (newTask) => {
-          taskArray[i] = newTask;
-          onUpdate(taskArray);
-        });
+    for (let i = 0; i < todoList.todoArray.length; i++) {
+      todoListCard.appendChild(this.createTask(todoList.todoArray[i]), (nt) => {
+        todoList.todoArray[i] = nt;
+        onChanged(todoList);
       });
     }
+
+    const newTaskButton = this.createTask(
+      new Todo("new", "Add New Task"),
+      (nt) => {
+        todoList.todoArray.push(nt);
+        onChanged(todoList);
+      },
+    );
+    newTaskButton.id = "newTaskButton";
+    todoListCard.appendChild(newTaskButton);
+  }
+
+  createTask(task = new Todo(), onChanged = (newTask) => {}) {
+    const todoEl = document.createElement("button");
+    todoEl.textContent = task.title;
+    todoEl.addEventListener("click", (_) => {
+      this._createTaskEditForm(task, (newTask) => {
+        onChanged(newTask);
+      });
+    });
+    return todoEl;
   }
 }
 
