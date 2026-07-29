@@ -21,7 +21,7 @@ class UI {
     this.content.append(this.header, this.todolistDivEl, this.footer);
   }
 
-  _createTaskEditForm(task, onSubmit = (newTask) => {}) {
+  createTaskEditForm(task, onSubmit = (newTask) => {}) {
     //create a popup
     const popupEl = document.createElement("div");
     popupEl.id = "popup";
@@ -91,7 +91,7 @@ class UI {
     this.todolistDivEl.innerHTML = "";
   }
 
-  displayTodoList(todoList = new TodoList(), onChanged = (newTodoList) => {}) {
+  createTodoList(todoList = new TodoList(), onChanged = (newTodoList) => {}) {
     const todoListCard = document.createElement("div");
     todoListCard.id = "todoListCard";
 
@@ -109,7 +109,6 @@ class UI {
             todoList.todoArray[i] = nt;
             onChanged(todoList);
           },
-          true,
           () => {
             (todoList.todoArray.splice(i, 1), onChanged(todoList));
           },
@@ -121,7 +120,7 @@ class UI {
     addTaskButtonEl.id = "newTask";
     addTaskButtonEl.textContent = "Add new Task";
     addTaskButtonEl.addEventListener("click", (e) => {
-      this._createTaskEditForm(new Todo(), (t) => {
+      this.createTaskEditForm(new Todo(), (t) => {
         todoList.todoArray.push(t);
         onChanged(todoList);
       });
@@ -130,11 +129,7 @@ class UI {
     todoListCard.appendChild(addTaskButtonEl);
   }
 
-  createTask(
-    task = new Todo(),
-    onChanged = (newTask) => {},
-    onRemove = () => {},
-  ) {
+  createTask(task = new Todo(), change = (newTask) => {}, remove = () => {}) {
     const taskDivEl = document.createElement("div");
     taskDivEl.id = "taskEl";
 
@@ -143,7 +138,7 @@ class UI {
     checkBoxEl.checked = task.done;
     checkBoxEl.addEventListener("change", (e) => {
       task.done = checkBoxEl.checked;
-      onChanged(task);
+      change(task);
     });
     taskDivEl.appendChild(checkBoxEl);
 
@@ -153,8 +148,8 @@ class UI {
     }
     taskButtonEl.textContent = task.title;
     taskButtonEl.addEventListener("click", (_) => {
-      this._createTaskEditForm(task, (newTask) => {
-        onChanged(newTask);
+      this.createTaskEditForm(task, (newTask) => {
+        change(newTask);
       });
     });
     taskDivEl.appendChild(taskButtonEl);
@@ -163,7 +158,7 @@ class UI {
     removeButtonEl.id = "del";
     removeButtonEl.textContent = "X";
     removeButtonEl.addEventListener("click", (e) => {
-      onRemove();
+      remove();
     });
     taskDivEl.appendChild(removeButtonEl);
     return taskDivEl;

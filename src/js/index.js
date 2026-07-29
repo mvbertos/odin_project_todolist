@@ -23,18 +23,18 @@ const todoListArray = [
   ]),
 ];
 
-function createTodoLists() {
+function display() {
   ui.clearTodoList();
   for (let i = 0; i < todoListArray.length; i++) {
     const e = todoListArray[i];
-    ui.displayTodoList(e, (newTodoList) => {
+    ui.createTodoList(e, (newTodoList) => {
       todoListArray[i] = newTodoList;
-      createTodoLists();
+      display();
     });
   }
 }
 
-createTodoLists();
+display();
 
 //Debug
 // const todoList1 = new TodoList("heyList", "This is My Title", [
