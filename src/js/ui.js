@@ -117,22 +117,22 @@ class UI {
       );
     }
 
-    const newTaskButton = this.createTask(
-      new Todo("new", "Add New Task"),
-      (nt) => {
-        todoList.todoArray.push(nt);
+    const addTaskButtonEl = document.createElement("button");
+    addTaskButtonEl.id = "newTask";
+    addTaskButtonEl.textContent = "Add new Task";
+    addTaskButtonEl.addEventListener("click", (e) => {
+      this._createTaskEditForm(new Todo(), (t) => {
+        todoList.todoArray.push(t);
         onChanged(todoList);
-      },
-    );
-    newTaskButton.id = "newTask";
+      });
+    });
 
-    todoListCard.appendChild(newTaskButton);
+    todoListCard.appendChild(addTaskButtonEl);
   }
 
   createTask(
     task = new Todo(),
     onChanged = (newTask) => {},
-    removeble = false,
     onRemove = () => {},
   ) {
     const taskDivEl = document.createElement("div");
@@ -145,15 +145,13 @@ class UI {
       });
     });
     taskDivEl.appendChild(taskButtonEl);
-    if (removeble) {
-      const removeButtonEl = document.createElement("button");
-      removeButtonEl.id = "del";
-      removeButtonEl.textContent = "X";
-      removeButtonEl.addEventListener("click", (e) => {
-        onRemove();
-      });
-      taskDivEl.appendChild(removeButtonEl);
-    }
+    const removeButtonEl = document.createElement("button");
+    removeButtonEl.id = "del";
+    removeButtonEl.textContent = "X";
+    removeButtonEl.addEventListener("click", (e) => {
+      onRemove();
+    });
+    taskDivEl.appendChild(removeButtonEl);
     return taskDivEl;
   }
 }

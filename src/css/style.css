@@ -59,14 +59,13 @@ body {
   grid-template-columns: 1fr min-content;
 }
 
-#newTask button {
+#newTask {
   border-style: none;
   background-color: transparent;
   color: rgb(16, 182, 118);
 }
 
-#newTask button:hover {
-  cursor: pointer;
+#newTask:hover {
   color: rgba(16, 182, 118, 0.53);
 }
 
@@ -77,7 +76,6 @@ body {
 }
 
 #taskEl #del:hover {
-  cursor: pointer;
   color: rgba(255, 0, 0, 0.429);
 }
 
