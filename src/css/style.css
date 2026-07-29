@@ -47,10 +47,38 @@ body {
 }
 
 #todoListCard button {
+  width: 100%;
   border-radius: 5px;
   padding: 1ch;
   border: 0px;
   display: flex;
+}
+
+#todoListCard #taskEl {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+}
+
+#newTask button {
+  border-style: none;
+  background-color: transparent;
+  color: rgb(16, 182, 118);
+}
+
+#newTask button:hover {
+  cursor: pointer;
+  color: rgba(16, 182, 118, 0.53);
+}
+
+#taskEl #del {
+  border-style: none;
+  background-color: transparent;
+  color: red;
+}
+
+#taskEl #del:hover {
+  cursor: pointer;
+  color: rgba(255, 0, 0, 0.429);
 }
 
 #popup {

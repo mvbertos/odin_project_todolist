@@ -25,6 +25,8 @@ class UI {
     //create a popup
     const popupEl = document.createElement("div");
     popupEl.id = "popup";
+
+    //If user click outside the popup it will close it self
     popupEl.addEventListener("click", (_) => {
       popupEl.remove();
     });
@@ -100,10 +102,19 @@ class UI {
     this.todolistDivEl.append(todoListCard);
 
     for (let i = 0; i < todoList.todoArray.length; i++) {
-      todoListCard.appendChild(this.createTask(todoList.todoArray[i]), (nt) => {
-        todoList.todoArray[i] = nt;
-        onChanged(todoList);
-      });
+      todoListCard.appendChild(
+        this.createTask(
+          todoList.todoArray[i],
+          (nt) => {
+            todoList.todoArray[i] = nt;
+            onChanged(todoList);
+          },
+          true,
+          () => {
+            (todoList.todoArray.splice(i, 1), onChanged(todoList));
+          },
+        ),
+      );
     }
 
     const newTaskButton = this.createTask(
@@ -113,19 +124,37 @@ class UI {
         onChanged(todoList);
       },
     );
-    newTaskButton.id = "newTaskButton";
+    newTaskButton.id = "newTask";
+
     todoListCard.appendChild(newTaskButton);
   }
 
-  createTask(task = new Todo(), onChanged = (newTask) => {}) {
-    const todoEl = document.createElement("button");
-    todoEl.textContent = task.title;
-    todoEl.addEventListener("click", (_) => {
+  createTask(
+    task = new Todo(),
+    onChanged = (newTask) => {},
+    removeble = false,
+    onRemove = () => {},
+  ) {
+    const taskDivEl = document.createElement("div");
+    taskDivEl.id = "taskEl";
+    const taskButtonEl = document.createElement("button");
+    taskButtonEl.textContent = task.title;
+    taskButtonEl.addEventListener("click", (_) => {
       this._createTaskEditForm(task, (newTask) => {
         onChanged(newTask);
       });
     });
-    return todoEl;
+    taskDivEl.appendChild(taskButtonEl);
+    if (removeble) {
+      const removeButtonEl = document.createElement("button");
+      removeButtonEl.id = "del";
+      removeButtonEl.textContent = "X";
+      removeButtonEl.addEventListener("click", (e) => {
+        onRemove();
+      });
+      taskDivEl.appendChild(removeButtonEl);
+    }
+    return taskDivEl;
   }
 }
 
