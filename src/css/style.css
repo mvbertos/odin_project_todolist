@@ -2,6 +2,7 @@
   --gap: 5px;
   --margin: 15px;
   --padding: 15px;
+  --lightBlue: rgb(0, 191, 255);
 }
 
 * {
@@ -26,7 +27,7 @@ body {
 
 .content > header {
   padding: var(--padding);
-  background-color: rgb(0, 191, 255);
+  background-color: var(--lightBlue);
 }
 
 .content .todoList {
@@ -86,11 +87,11 @@ body {
 .add {
   border-style: none;
   background-color: transparent;
-  color: rgb(16, 182, 118);
+  color: var(--lightBlue);
 }
 
 .add:hover {
-  color: rgba(16, 182, 118, 0.53);
+  filter: opacity(0.5);
 }
 
 .del {
@@ -100,7 +101,7 @@ body {
 }
 
 .del:hover {
-  color: rgba(255, 0, 0, 0.429);
+  filter: opacity(0.5);
 }
 
 .popup {
@@ -120,7 +121,20 @@ form {
   background-color: gainsboro;
 }
 
-footer {
+form footer {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+form footer .add {
+  padding-top: var(--padding);
+  color: var(--lightBlue);
+  width: min-content;
+  height: min-content;
+}
+
+.content > footer {
   padding: var(--padding);
   display: flex;
   align-items: center;

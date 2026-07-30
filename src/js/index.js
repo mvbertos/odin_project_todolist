@@ -62,7 +62,7 @@ function display() {
       ),
     );
   }
-  const addTodoButtonEl = ui.createAddButton("Add TodoList", (_) => {
+  const addTodoButtonEl = ui.createAddButton("Add todolist", (_) => {
     ui.showPopup(
       ui.createTodoListForm((ntdl) => {
         todoListArray.push(ntdl);

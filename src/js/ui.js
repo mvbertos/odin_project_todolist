@@ -29,8 +29,8 @@ class UI {
 
   createTaskForm(task, submit = (newTask) => {}) {
     //here start the formulary
-    const form = document.createElement("form");
-    form.className = "todoEditForm";
+    const formEl = document.createElement("form");
+    // formEl.className = "todoEditForm";
 
     const titleTextEl = document.createElement("label");
     titleTextEl.textContent = "Title";
@@ -47,24 +47,25 @@ class UI {
     } else {
       descriptionInputEl.placeholder = "Empty";
     }
-
+    const footerDivEl = document.createElement("footer");
     const saveButtonEl = document.createElement("button");
+    saveButtonEl.className = "add";
     saveButtonEl.type = "submit";
     saveButtonEl.textContent = "Save";
-
-    form.append(
+    footerDivEl.appendChild(saveButtonEl);
+    formEl.append(
       titleTextEl,
       titleInputEl,
       descriptionTextEl,
       descriptionInputEl,
-      saveButtonEl,
+      footerDivEl,
     );
 
-    form.addEventListener("click", (e) => {
+    formEl.addEventListener("click", (e) => {
       e.stopPropagation();
     });
 
-    form.addEventListener("submit", (e) => {
+    formEl.addEventListener("submit", (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(e.target));
       const newTask = new Task(
@@ -75,13 +76,13 @@ class UI {
       submit(newTask);
     });
 
-    return form;
+    return formEl;
   }
 
   createTodoListForm(submit = (newTodoList) => {}) {
     //here start the formulary
-    const form = document.createElement("form");
-    form.className = "todoEditForm";
+    const formEl = document.createElement("form");
+    // formEl.className = "todoEditForm";
 
     const titleTextEl = document.createElement("label");
     titleTextEl.textContent = "Title";
@@ -89,32 +90,27 @@ class UI {
     titleInputEl.name = "title";
     titleInputEl.placeholder = "Title";
 
-    const footerDivEl = document.createElement("div");
+    const footerDivEl = document.createElement("footer");
     const saveButtonEl = document.createElement("button");
     saveButtonEl.type = "submit";
     saveButtonEl.textContent = "Save";
+    saveButtonEl.className = "add";
 
-    const cancelButtonEl = document.createElement("button");
-    cancelButtonEl.addEventListener("click", (e) => {
-      e.stopPropagation();
-    });
-    cancelButtonEl.textContent = "Cancel";
+    footerDivEl.appendChild(saveButtonEl);
 
-    footerDivEl.append(saveButtonEl, cancelButtonEl);
+    formEl.append(titleTextEl, titleInputEl, footerDivEl);
 
-    form.append(titleTextEl, titleInputEl, footerDivEl);
-
-    form.addEventListener("click", (e) => {
+    formEl.addEventListener("click", (e) => {
       e.stopPropagation();
     });
 
-    form.addEventListener("submit", (e) => {
+    formEl.addEventListener("submit", (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(e.target));
       const newTodoList = new TodoList(Date.UTC.toString(), formData["title"]);
       submit(newTodoList);
     });
-    return form;
+    return formEl;
   }
 
   createTodoList(
