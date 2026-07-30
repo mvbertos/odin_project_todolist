@@ -1,19 +1,15 @@
 import { Todo } from "./todo";
 
 class TodoList {
-  constructor(id = "", title = "", todo_array = [new Todo()]) {
+  constructor(id = "", title = "", todo_array = []) {
     this._id = id;
     this.title = title;
     this.todoArray = todo_array;
   }
 
-  get id(){
+  get id() {
     return this._id;
   }
-
-  // get todoArray() {
-  //   return this._todoArray;
-  // }
 
   addTodo(newTodo) {
     if (newTodo instanceof Todo) {

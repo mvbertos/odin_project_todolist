@@ -148,14 +148,26 @@ class UI {
     this.todolistDivEl.innerHTML = "";
   }
 
-  createTodoList(todoList = new TodoList(), onChanged = (newTodoList) => {}) {
+  createTodoList(
+    todoList = new TodoList(),
+    changed = (newTodoList) => {},
+    remove = () => {},
+  ) {
     const todoListCard = document.createElement("div");
     todoListCard.className = "todoListCard";
 
+    const headerDivEl = document.createElement("header");
+    const removeButtonEl = document.createElement("button");
+    removeButtonEl.textContent = "X";
+    removeButtonEl.className = "del";
+    removeButtonEl.addEventListener("click", (e) => {
+      remove();
+    });
     const titleEl = document.createElement("h2");
     titleEl.textContent = todoList.title;
 
-    todoListCard.append(titleEl);
+    headerDivEl.append(titleEl, removeButtonEl);
+    todoListCard.append(headerDivEl);
     this.todolistDivEl.append(todoListCard);
 
     for (let i = 0; i < todoList.todoArray.length; i++) {
@@ -164,22 +176,22 @@ class UI {
           todoList.todoArray[i],
           (nt) => {
             todoList.todoArray[i] = nt;
-            onChanged(todoList);
+            changed(todoList);
           },
           () => {
-            (todoList.todoArray.splice(i, 1), onChanged(todoList));
+            (todoList.todoArray.splice(i, 1), changed(todoList));
           },
         ),
       );
     }
 
     const addTaskButtonEl = document.createElement("button");
-    addTaskButtonEl.className = "newTask";
+    addTaskButtonEl.className = "add";
     addTaskButtonEl.textContent = "Add new Task";
     addTaskButtonEl.addEventListener("click", (e) => {
       this.createTaskEditForm(new Todo(), (t) => {
         todoList.todoArray.push(t);
-        onChanged(todoList);
+        changed(todoList);
       });
     });
 
