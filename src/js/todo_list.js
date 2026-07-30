@@ -1,7 +1,7 @@
 import { Task } from "./task";
 
 class TodoList {
-  constructor(id = "", title = "", todo_array = []) {
+  constructor(id = "", title = "", todo_array = [new Task()]) {
     this._id = id;
     this.title = title;
     this.todoArray = todo_array;
