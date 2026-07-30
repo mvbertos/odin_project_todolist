@@ -40,10 +40,10 @@ body {
 
 .todoListCard {
   gap: var(--gap);
-  border-radius: 10px;
   margin: var(--margin);
   padding: var(--padding);
-  border: 1px black solid;
+  border-radius: 10px;
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.479);
   display: grid;
 }
 
