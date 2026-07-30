@@ -27,11 +27,21 @@ function display() {
   ui.clearTodoList();
   for (let i = 0; i < todoListArray.length; i++) {
     const e = todoListArray[i];
-    ui.createTodoList(e, (newTodoList) => {
-      todoListArray[i] = newTodoList;
+    ui.createTodoList(e, (ntl) => {
+      todoListArray[i] = ntl;
       display();
     });
   }
+  const addTodoListButtonEl = document.createElement("button");
+  addTodoListButtonEl.textContent = "Add new todolist";
+  addTodoListButtonEl.className = "todoListCard newTodoList";
+  ui.todolistDivEl.appendChild(addTodoListButtonEl);
+  addTodoListButtonEl.addEventListener("click", (e) => {
+    ui.createTodoListForm((ntdl) => {
+      todoListArray.push(ntdl);
+      display();
+    });
+  });
 }
 
 display();
