@@ -1,4 +1,4 @@
-import { Todo } from "./todo";
+import { Todo } from "./task";
 import { TodoList } from "./todo_list";
 
 class Project {

@@ -1,4 +1,4 @@
-class Todo {
+class Task {
   constructor(
     id = "",
     title = "",
@@ -24,4 +24,4 @@ class Todo {
   }
 }
 
-export { Todo };
+export { Task };

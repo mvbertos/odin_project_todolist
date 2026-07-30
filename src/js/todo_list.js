@@ -1,4 +1,4 @@
-import { Todo } from "./todo";
+import { Task } from "./task";
 
 class TodoList {
   constructor(id = "", title = "", todo_array = []) {
@@ -12,7 +12,7 @@ class TodoList {
   }
 
   addTodo(newTodo) {
-    if (newTodo instanceof Todo) {
+    if (newTodo instanceof Task) {
       this._todoArray.push(newTodo);
     } else {
       console.error(
