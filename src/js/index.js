@@ -1,3 +1,4 @@
+import "../css/style.css";
 import { Project } from "./project";
 import { Task } from "./task";
 import { TodoList } from "./todo_list";
@@ -23,12 +24,31 @@ const todoListArray = [
   ]),
 ];
 
+const content = document.getElementById("content");
+content.className = "content";
+
+//header
+const header = document.createElement("header");
+const headerLabel = document.createElement("h1");
+headerLabel.textContent = "Todo List";
+header.appendChild(headerLabel);
+
+//List
+const todolistDivEl = document.createElement("div");
+todolistDivEl.className = "todoList";
+
+//Footer
+const footer = document.createElement("footer");
+footer.textContent = "made by logout";
+
+content.append(header, todolistDivEl, footer);
+
 function display() {
-  ui.todolistDivEl.innerHTML = "";
+  todolistDivEl.innerHTML = "";
   //populate todolist
   for (let i = 0; i < todoListArray.length; i++) {
     const e = todoListArray[i];
-    ui.todolistDivEl.appendChild(
+    todolistDivEl.appendChild(
       ui.createTodoList(
         e,
         (ntl) => {
@@ -42,21 +62,16 @@ function display() {
       ),
     );
   }
-
-  //add new todolist button
-  const addTodoListButtonEl = document.createElement("button");
-  addTodoListButtonEl.textContent = "Add new todolist";
-  addTodoListButtonEl.className = "todoListCard add";
-  ui.todolistDivEl.appendChild(addTodoListButtonEl);
-  addTodoListButtonEl.addEventListener("click", (e) => {
-    ui.content.appendChild(
+  const addTodoButtonEl = ui.createAddButton("Add TodoList", (_) => {
+    ui.showPopup(
       ui.createTodoListForm((ntdl) => {
         todoListArray.push(ntdl);
         display();
+        ui.showPopup(null);
       }),
     );
   });
+  todolistDivEl.appendChild(addTodoButtonEl);
 }
 
-ui.createMainPage();
 display();

@@ -1,40 +1,33 @@
-import "../css/style.css";
 import { Task } from "./task";
 import { TodoList } from "./todo_list";
 
 //This class only responsibility is to help the user to create new interfaces
 class UI {
-  constructor() {}
+  showPopup(element) {
+    const content = document.getElementById("content");
 
-  createMainPage() {
-    this.content = document.getElementById("content");
-    this.content.className = "content";
+    let popupEl = document.getElementById("popup");
+    if (popupEl) {
+      popupEl.remove();
+    }
 
-    //create header
-    this.header = document.createElement("header");
-    const headerLabel = document.createElement("h1");
-    headerLabel.textContent = "Todo List";
-    this.header.appendChild(headerLabel);
+    if (element) {
+      //create a popup
+      popupEl = document.createElement("div");
+      popupEl.id = "popup";
+      popupEl.className = "popup";
 
-    this.todolistDivEl = document.createElement("div");
-    this.todolistDivEl.className = "todoList";
+      //If user click outside the popup it will close it self
+      popupEl.addEventListener("click", (_) => {
+        popupEl.remove();
+      });
 
-    this.footer = document.createElement("footer");
-    this.footer.textContent = "made by logout";
-
-    this.content.append(this.header, this.todolistDivEl, this.footer);
+      popupEl.appendChild(element);
+      content.appendChild(popupEl);
+    }
   }
 
   createTaskForm(task, submit = (newTask) => {}) {
-    //create a popup
-    const popupEl = document.createElement("div");
-    popupEl.className = "popup";
-
-    //If user click outside the popup it will close it self
-    popupEl.addEventListener("click", (_) => {
-      popupEl.remove();
-    });
-
     //here start the formulary
     const form = document.createElement("form");
     form.className = "todoEditForm";
@@ -59,20 +52,12 @@ class UI {
     saveButtonEl.type = "submit";
     saveButtonEl.textContent = "Save";
 
-    const cancelButtonEl = document.createElement("button");
-    cancelButtonEl.addEventListener("click", (e) => {
-      e.stopPropagation();
-      popupEl.remove();
-    });
-    cancelButtonEl.textContent = "Cancel";
-
     form.append(
       titleTextEl,
       titleInputEl,
       descriptionTextEl,
       descriptionInputEl,
       saveButtonEl,
-      cancelButtonEl,
     );
 
     form.addEventListener("click", (e) => {
@@ -88,23 +73,12 @@ class UI {
         formData["desc"],
       );
       submit(newTask);
-      popupEl.remove();
     });
 
-    popupEl.appendChild(form);
-    return popupEl;
+    return form;
   }
 
   createTodoListForm(submit = (newTodoList) => {}) {
-    //create a popup
-    const popupEl = document.createElement("div");
-    popupEl.className = "popup";
-
-    //If user click outside the popup it will close it self
-    popupEl.addEventListener("click", (_) => {
-      popupEl.remove();
-    });
-
     //here start the formulary
     const form = document.createElement("form");
     form.className = "todoEditForm";
@@ -123,7 +97,6 @@ class UI {
     const cancelButtonEl = document.createElement("button");
     cancelButtonEl.addEventListener("click", (e) => {
       e.stopPropagation();
-      popupEl.remove();
     });
     cancelButtonEl.textContent = "Cancel";
 
@@ -140,11 +113,8 @@ class UI {
       const formData = Object.fromEntries(new FormData(e.target));
       const newTodoList = new TodoList(Date.UTC.toString(), formData["title"]);
       submit(newTodoList);
-      popupEl.remove();
     });
-
-    popupEl.appendChild(form);
-    return popupEl;
+    return form;
   }
 
   createTodoList(
@@ -183,20 +153,26 @@ class UI {
       );
     }
 
-    const addTaskButtonEl = document.createElement("button");
-    addTaskButtonEl.className = "add";
-    addTaskButtonEl.textContent = "Add new Task";
-    addTaskButtonEl.addEventListener("click", (e) => {
-      this.content.appendChild(
+    const addTaskButtonEl = this.createAddButton("Add task", (_) => {
+      this.showPopup(
         this.createTaskForm(new Task(), (t) => {
           todoList.todoArray.push(t);
           changed(todoList);
+          this.showPopup(null);
         }),
       );
     });
 
     todoListCard.appendChild(addTaskButtonEl);
     return todoListCard;
+  }
+
+  createAddButton(textContent = "Add Something", click = (e) => {}) {
+    const button = document.createElement("button");
+    button.className = "add";
+    button.textContent = textContent;
+    button.addEventListener("click", click);
+    return button;
   }
 
   createTask(task = new Task(), change = (newTask) => {}, remove = () => {}) {
@@ -218,7 +194,7 @@ class UI {
     }
     taskButtonEl.textContent = task.title;
     taskButtonEl.addEventListener("click", (_) => {
-      this.content.appendChild(
+      document.getElementById("content").appendChild(
         this.createTaskForm(task, (newTask) => {
           change(newTask);
         }),
