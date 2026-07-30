@@ -64,10 +64,10 @@ function display() {
   }
   const addTodoButtonEl = ui.createAddButton("Add todolist", (_) => {
     ui.showPopup(
-      ui.createTodoListForm((ntdl) => {
-        todoListArray.push(ntdl);
-        display();
+      ui.createForm([{ name: "Title", value: "", type: "Text" }], (v) => {
+        todoListArray.push(new TodoList(v["Title"], v["Title"]));
         ui.showPopup(null);
+        display();
       }),
     );
   });

@@ -6,7 +6,6 @@ class Task {
     dueDate = "",
     priority = "",
     notes = [""],
-    checklist = [""],
     done = false,
   ) {
     this._id = id;
@@ -15,7 +14,6 @@ class Task {
     this.dueDate = dueDate;
     this.priority = priority;
     this.notes = notes;
-    this.checklist = checklist;
     this.done = done;
   }
 

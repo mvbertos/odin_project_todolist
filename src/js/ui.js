@@ -27,39 +27,36 @@ class UI {
     }
   }
 
-  createTaskForm(task, submit = (newTask) => {}) {
-    //here start the formulary
+  createForm(fields = [{}], submit = (d) => {}) {
     const formEl = document.createElement("form");
-    // formEl.className = "todoEditForm";
+    fields.forEach((v) => {
+      const labelEl = document.createElement("label");
+      labelEl.textContent = v["name"];
+      formEl.appendChild(labelEl);
 
-    const titleTextEl = document.createElement("label");
-    titleTextEl.textContent = "Title";
-    const titleInputEl = document.createElement("input");
-    titleInputEl.name = "title";
-    titleInputEl.value = task.title;
+      if (v["type"] == "select" && Object.hasOwn(v, "options")) {
+        const selectEl = document.createElement("select");
+        selectEl.name = v["name"];
+        selectEl.innerHTML = v["options"]
+          .map((opt) => "<option value=" + opt + ">" + opt + "</option>")
+          .join("");
+        formEl.appendChild(selectEl);
+      } else {
+        const inputEl = document.createElement("input");
+        inputEl.value = v["value"];
+        inputEl.name = v["name"];
+        inputEl.type = v["type"];
+        formEl.appendChild(inputEl);
+      }
+    });
 
-    const descriptionTextEl = document.createElement("label");
-    descriptionTextEl.textContent = "Description";
-    const descriptionInputEl = document.createElement("input");
-    descriptionInputEl.name = "desc";
-    if (task.description != "") {
-      descriptionInputEl.value = task.description;
-    } else {
-      descriptionInputEl.placeholder = "Empty";
-    }
     const footerDivEl = document.createElement("footer");
     const saveButtonEl = document.createElement("button");
     saveButtonEl.className = "add";
     saveButtonEl.type = "submit";
     saveButtonEl.textContent = "Save";
     footerDivEl.appendChild(saveButtonEl);
-    formEl.append(
-      titleTextEl,
-      titleInputEl,
-      descriptionTextEl,
-      descriptionInputEl,
-      footerDivEl,
-    );
+    formEl.appendChild(footerDivEl);
 
     formEl.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -68,48 +65,9 @@ class UI {
     formEl.addEventListener("submit", (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(e.target));
-      const newTask = new Task(
-        task.className,
-        formData["title"],
-        formData["desc"],
-      );
-      submit(newTask);
+      submit(formData);
     });
 
-    return formEl;
-  }
-
-  createTodoListForm(submit = (newTodoList) => {}) {
-    //here start the formulary
-    const formEl = document.createElement("form");
-    // formEl.className = "todoEditForm";
-
-    const titleTextEl = document.createElement("label");
-    titleTextEl.textContent = "Title";
-    const titleInputEl = document.createElement("input");
-    titleInputEl.name = "title";
-    titleInputEl.placeholder = "Title";
-
-    const footerDivEl = document.createElement("footer");
-    const saveButtonEl = document.createElement("button");
-    saveButtonEl.type = "submit";
-    saveButtonEl.textContent = "Save";
-    saveButtonEl.className = "add";
-
-    footerDivEl.appendChild(saveButtonEl);
-
-    formEl.append(titleTextEl, titleInputEl, footerDivEl);
-
-    formEl.addEventListener("click", (e) => {
-      e.stopPropagation();
-    });
-
-    formEl.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const formData = Object.fromEntries(new FormData(e.target));
-      const newTodoList = new TodoList(Date.UTC.toString(), formData["title"]);
-      submit(newTodoList);
-    });
     return formEl;
   }
 
@@ -154,7 +112,6 @@ class UI {
         this.createTaskForm(new Task(), (t) => {
           todoList.todoArray.push(t);
           changed(todoList);
-          this.showPopup(null);
         }),
       );
     });
@@ -188,13 +145,14 @@ class UI {
     if (task.done) {
       taskButtonEl.className += "dashed";
     }
-    taskButtonEl.textContent = task.title;
+    const titleEl = document.createElement("p");
+    titleEl.textContent = task.title;
+    const dueEl = document.createElement("p");
+    dueEl.textContent = task.dueDate.toString();
+    dueEl.className = "subtext";
+    taskButtonEl.append(titleEl, dueEl);
     taskButtonEl.addEventListener("click", (_) => {
-      document.getElementById("content").appendChild(
-        this.createTaskForm(task, (newTask) => {
-          change(newTask);
-        }),
-      );
+      this.showPopup(this.createTaskForm(task, change));
     });
     taskDivEl.appendChild(taskButtonEl);
 
@@ -206,6 +164,40 @@ class UI {
     });
     taskDivEl.appendChild(removeButtonEl);
     return taskDivEl;
+  }
+  createTaskForm(value, change = (t) => {}) {
+    return this.createForm(
+      [
+        {
+          name: "Title",
+          value: value.title,
+          type: "text",
+        },
+        {
+          name: "Description",
+          value: value.description,
+          type: "text",
+        },
+        {
+          name: "DueDate",
+          value: value.dueDate,
+          type: "date",
+        },
+        {
+          name: "Priority",
+          value: value.priority,
+          type: "select",
+          options: ["low", "medium", "high"],
+        },
+      ],
+      (e) => {
+        change(
+          new Task(e["Title"], e["Title"], e["Description"], e["DueDate"]),
+        );
+        this.showPopup(null);
+        // change(new Task(e[]));
+      },
+    );
   }
 }
 
