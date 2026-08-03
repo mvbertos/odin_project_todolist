@@ -28,7 +28,12 @@ class UI {
     }
   }
 
-  createForm(fields = [{}], submit = (d) => {}) {
+  createForm(
+    fields = [{}],
+    submit = (d) => {},
+    canDelete = false,
+    remove = (e) => {},
+  ) {
     const formEl = document.createElement("form");
     fields.forEach((v) => {
       const labelEl = document.createElement("label");
@@ -52,6 +57,16 @@ class UI {
     });
 
     const footerDivEl = document.createElement("footer");
+    if (canDelete) {
+      const deleteButtonEl = document.createElement("button");
+      deleteButtonEl.className = "del";
+      deleteButtonEl.textContent = "Delete";
+      deleteButtonEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        remove(e);
+      });
+      footerDivEl.appendChild(deleteButtonEl);
+    }
     const saveButtonEl = document.createElement("button");
     saveButtonEl.className = "add";
     saveButtonEl.type = "submit";
@@ -72,9 +87,14 @@ class UI {
     return formEl;
   }
 
-  createProjectCard(title = "", click = (e) => {}) {
+  createProjectCard(title = "", click = (e) => {}, remove = (e) => {}) {
     const projCard = document.createElement("div");
     projCard.className = "projectCard";
+
+    const removeButtonEl = document.createElement("button");
+    removeButtonEl.addEventListener("click", (_) => {
+      remove(e);
+    });
 
     const titleEl = document.createElement("h2");
     titleEl.textContent = title;
@@ -114,8 +134,10 @@ class UI {
             todoList.todoArray[i] = nt;
             changed(todoList);
           },
-          () => {
-            (todoList.todoArray.splice(i, 1), changed(todoList));
+          (_) => {
+            console.log(todoList.todoArray[i]);
+            todoList.todoArray.splice(todoList.todoArray[i], 1);
+            changed(todoList);
           },
         ),
       );
@@ -123,10 +145,14 @@ class UI {
 
     const addTaskButtonEl = this.createAddButton("Add task", (_) => {
       this.showPopup(
-        this.createTaskForm(new Task(), (t) => {
-          todoList.todoArray.push(t);
-          changed(todoList);
-        }),
+        this.createTaskForm(
+          new Task(),
+          (t) => {
+            todoList.todoArray.push(t);
+            changed(todoList);
+          },
+          false,
+        ),
       );
     });
 
@@ -142,7 +168,7 @@ class UI {
     return button;
   }
 
-  createTask(task = new Task(), change = (newTask) => {}, remove = () => {}) {
+  createTask(task = new Task(), change = (newTask) => {}, remove = (e) => {}) {
     const taskDivEl = document.createElement("div");
     taskDivEl.className = "taskEl";
 
@@ -166,20 +192,18 @@ class UI {
     dueEl.className = "subtext";
     taskButtonEl.append(titleEl, dueEl);
     taskButtonEl.addEventListener("click", (_) => {
-      this.showPopup(this.createTaskForm(task, change));
+      this.showPopup(this.createTaskForm(task, change, true, remove));
     });
     taskDivEl.appendChild(taskButtonEl);
-
-    const removeButtonEl = document.createElement("button");
-    removeButtonEl.className = "del";
-    removeButtonEl.textContent = "X";
-    removeButtonEl.addEventListener("click", (e) => {
-      remove();
-    });
-    taskDivEl.appendChild(removeButtonEl);
     return taskDivEl;
   }
-  createTaskForm(value, change = (t) => {}) {
+
+  createTaskForm(
+    value,
+    change = (t) => {},
+    removable = true,
+    remove = (e) => {},
+  ) {
     return this.createForm(
       [
         {
@@ -211,6 +235,8 @@ class UI {
         this.showPopup(null);
         // change(new Task(e[]));
       },
+      removable,
+      remove,
     );
   }
 }

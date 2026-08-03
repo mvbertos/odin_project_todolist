@@ -4,11 +4,10 @@ import { TodoList } from "./todo_list";
 class Project {
   constructor(title = "", desc = "", todoListArray = [new TodoList()]) {
     this.title = title;
-    this.desc = desc;
     this._todoListArray = todoListArray;
   }
 
-  get todoListArray(){
+  get todoListArray() {
     return this._todoListArray;
   }
 
@@ -24,17 +23,15 @@ class Project {
     }
   }
 
-
-  moveTask(a,b,taID){
+  moveTask(a, b, taID) {
     const idx = a.findItem(taID);
-    if(idx != -1){
+    if (idx != -1) {
       b.todoArray.push(a.todoArray[idx]);
-      a.todoArray.splice(idx,1);
-    }else{
-      throw("Tried to move an invalid task")
+      a.todoArray.splice(idx, 1);
+    } else {
+      throw "Tried to move an invalid task";
     }
   }
-
 
   getTodoListById(id) {
     for (let index = 0; index < this._todoListArray.length; index++) {

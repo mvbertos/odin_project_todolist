@@ -80,7 +80,7 @@ function displayTodoList(todoListArray = []) {
           todoListArray[i] = ntl;
           displayTodoList(todoListArray);
         },
-        () => {
+        (_) => {
           todoListArray.splice(i, 1);
           displayTodoList(todoListArray);
         },
@@ -113,6 +113,24 @@ function displayProject(projectArray = []) {
       }),
     );
   }
+  const addProjectButtonEl = ui.createAddButton("New Project", (_) => {
+    ui.showPopup(
+      ui.createForm(
+        [
+          {
+            name: "Title",
+            value: "",
+            type: "Text",
+          },
+        ],
+        (v) => {
+          projectArray.push(new Project(v["Title"]));
+          displayProject(projectArray);
+        },
+      ),
+    );
+  });
+  todolistDivEl.appendChild(addProjectButtonEl);
 }
 
 displayProject(projectArray);
