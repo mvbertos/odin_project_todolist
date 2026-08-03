@@ -28,6 +28,15 @@ body {
 .content > header {
   padding: var(--padding);
   background-color: var(--lightBlue);
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  gap: var(--gap);
+}
+
+.content > header > button {
+  border-radius: 10px;
+  padding: 2px;
+  background: transparent;
 }
 
 .content .todoList {
@@ -147,4 +156,16 @@ form footer .add {
   justify-content: center;
   background-color: rgb(35, 35, 35);
   color: gainsboro;
+}
+
+.projectCard {
+  margin: var(--margin);
+  padding: var(--padding);
+  background-color: var(--lightBlue);
+  box-shadow: 0px 10px 7px rgba(0, 0, 0, 0.253);
+  border-radius: 10px;
+  border: none;
+  height: min-content;
+  width: 20ch;
+  text-align: center;
 }

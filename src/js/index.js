@@ -6,21 +6,40 @@ import { UI } from "./ui";
 
 const ui = new UI();
 
-const todoListArray = [
-  new TodoList("helloWorld", "Maggot", [
-    new Task("td1", "hello"),
-    new Task("td2", "world"),
-    new Task("td3", "what?"),
+const projectArray = [
+  new Project("Pokeman", "", [
+    new TodoList("helloWorld", "Maggot", [
+      new Task("td1", "hello"),
+      new Task("td2", "world"),
+      new Task("td3", "what?"),
+    ]),
+    new TodoList("helloWorld1", "Fox", [
+      new Task("td1", "hello"),
+      new Task("td2", "world"),
+      new Task("td3", "what?"),
+    ]),
+    new TodoList("helloWorld2", "Devil", [
+      new Task("td1", "hello"),
+      new Task("td2", "world"),
+      new Task("td3", "what?"),
+    ]),
   ]),
-  new TodoList("helloWorld1", "Fox", [
-    new Task("td1", "hello"),
-    new Task("td2", "world"),
-    new Task("td3", "what?"),
-  ]),
-  new TodoList("helloWorld2", "Devil", [
-    new Task("td1", "hello"),
-    new Task("td2", "world"),
-    new Task("td3", "what?"),
+  new Project("PWR", "", [
+    new TodoList("helloWorld", "Maggot", [
+      new Task("td1", "hello"),
+      new Task("td2", "world"),
+      new Task("td3", "what?"),
+    ]),
+    new TodoList("helloWorld1", "Fox", [
+      new Task("td1", "hello"),
+      new Task("td2", "world"),
+      new Task("td3", "what?"),
+    ]),
+    new TodoList("helloWorld2", "Devil", [
+      new Task("td1", "hello"),
+      new Task("td2", "world"),
+      new Task("td3", "what?"),
+    ]),
   ]),
 ];
 
@@ -29,9 +48,12 @@ content.className = "content";
 
 //header
 const header = document.createElement("header");
-const headerLabel = document.createElement("h1");
-headerLabel.textContent = "Todo List";
-header.appendChild(headerLabel);
+const headerLabelEl = document.createElement("h1");
+headerLabelEl.textContent = "Todo List";
+const buttonReturnEl = document.createElement("button");
+buttonReturnEl.textContent = "<-";
+header.append(buttonReturnEl, headerLabelEl);
+buttonReturnEl.hidden = true;
 
 //List
 const todolistDivEl = document.createElement("div");
@@ -43,21 +65,24 @@ footer.textContent = "made by logout";
 
 content.append(header, todolistDivEl, footer);
 
-function display() {
+function displayTodoList(todoListArray = []) {
   todolistDivEl.innerHTML = "";
+  buttonReturnEl.addEventListener("click", (_) => {
+    displayProject(projectArray);
+  });
   //populate todolist
   for (let i = 0; i < todoListArray.length; i++) {
     const e = todoListArray[i];
     todolistDivEl.appendChild(
-      ui.createTodoList(
+      ui.createTodoListCard(
         e,
         (ntl) => {
           todoListArray[i] = ntl;
-          display();
+          displayTodoList(todoListArray);
         },
         () => {
           todoListArray.splice(i, 1);
-          display();
+          displayTodoList(todoListArray);
         },
       ),
     );
@@ -67,11 +92,27 @@ function display() {
       ui.createForm([{ name: "Title", value: "", type: "Text" }], (v) => {
         todoListArray.push(new TodoList(v["Title"], v["Title"]));
         ui.showPopup(null);
-        display();
+        displayTodoList(todoListArray);
       }),
     );
   });
   todolistDivEl.appendChild(addTodoButtonEl);
 }
 
-display();
+function displayProject(projectArray = []) {
+  todolistDivEl.innerHTML = "";
+  buttonReturnEl.hidden = true;
+  headerLabelEl.textContent = "Projects";
+  for (let i = 0; i < projectArray.length; i++) {
+    const e = projectArray[i];
+    todolistDivEl.appendChild(
+      ui.createProjectCard(e.title, (_) => {
+        buttonReturnEl.hidden = false;
+        headerLabelEl.textContent = e.title;
+        displayTodoList(e.todoListArray);
+      }),
+    );
+  }
+}
+
+displayProject(projectArray);

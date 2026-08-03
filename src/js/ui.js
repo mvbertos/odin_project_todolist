@@ -1,3 +1,4 @@
+import { Project } from "./project";
 import { Task } from "./task";
 import { TodoList } from "./todo_list";
 
@@ -71,7 +72,20 @@ class UI {
     return formEl;
   }
 
-  createTodoList(
+  createProjectCard(title = "", click = (e) => {}) {
+    const projCard = document.createElement("div");
+    projCard.className = "projectCard";
+
+    const titleEl = document.createElement("h2");
+    titleEl.textContent = title;
+    projCard.appendChild(titleEl);
+    projCard.addEventListener("click", (e) => {
+      click(e);
+    });
+    return projCard;
+  }
+
+  createTodoListCard(
     todoList = new TodoList(),
     changed = (newTodoList) => {},
     remove = () => {},
