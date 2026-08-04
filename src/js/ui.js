@@ -88,21 +88,26 @@ class UI {
   }
 
   createProjectCard(title = "", click = (e) => {}, remove = (e) => {}) {
-    const projCard = document.createElement("div");
-    projCard.className = "projectCard";
-
-    const removeButtonEl = document.createElement("button");
-    removeButtonEl.addEventListener("click", (_) => {
-      remove(e);
-    });
+    const projCardEl = document.createElement("div");
+    projCardEl.className = "projectCard";
 
     const titleEl = document.createElement("h2");
     titleEl.textContent = title;
-    projCard.appendChild(titleEl);
-    projCard.addEventListener("click", (e) => {
+    projCardEl.appendChild(titleEl);
+    projCardEl.addEventListener("click", (e) => {
       click(e);
     });
-    return projCard;
+
+    const removeButtonEl = document.createElement("button");
+    removeButtonEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      remove(e);
+    });
+    removeButtonEl.textContent = "X";
+    removeButtonEl.className = "del";
+    projCardEl.appendChild(removeButtonEl);
+
+    return projCardEl;
   }
 
   createTodoListCard(
@@ -114,16 +119,33 @@ class UI {
     todoListCard.className = "todoListCard";
 
     const headerDivEl = document.createElement("header");
-    const removeButtonEl = document.createElement("button");
-    removeButtonEl.textContent = "X";
-    removeButtonEl.className = "del";
-    removeButtonEl.addEventListener("click", (e) => {
-      remove();
+    headerDivEl.addEventListener("click", (e) => {
+      this.showPopup(
+        this.createForm(
+          [
+            {
+              name: "Title",
+              value: todoList.title,
+              type: "text",
+            },
+          ],
+          (td) => {
+            this.showPopup(null);
+            todoList.title = td["Title"];
+            changed(todoList);
+          },
+          true,
+          (e) => {
+            this.showPopup(null);
+            remove();
+          },
+        ),
+      );
     });
     const titleEl = document.createElement("h2");
     titleEl.textContent = todoList.title;
 
-    headerDivEl.append(titleEl, removeButtonEl);
+    headerDivEl.append(titleEl);
     todoListCard.append(headerDivEl);
 
     for (let i = 0; i < todoList.todoArray.length; i++) {

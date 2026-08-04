@@ -106,11 +106,18 @@ function displayProject(projectArray = []) {
   for (let i = 0; i < projectArray.length; i++) {
     const e = projectArray[i];
     todolistDivEl.appendChild(
-      ui.createProjectCard(e.title, (_) => {
-        buttonReturnEl.hidden = false;
-        headerLabelEl.textContent = e.title;
-        displayTodoList(e.todoListArray);
-      }),
+      ui.createProjectCard(
+        e.title,
+        (_) => {
+          buttonReturnEl.hidden = false;
+          headerLabelEl.textContent = e.title;
+          displayTodoList(e.todoListArray);
+        },
+        (_) => {
+          projectArray.splice(i, 1);
+          displayProject(projectArray);
+        },
+      ),
     );
   }
   const addProjectButtonEl = ui.createAddButton("New Project", (_) => {

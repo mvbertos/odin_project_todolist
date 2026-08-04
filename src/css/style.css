@@ -168,4 +168,6 @@ form footer .add {
   height: min-content;
   width: 20ch;
   text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1ch;
 }
