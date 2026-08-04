@@ -135,8 +135,7 @@ class UI {
             changed(todoList);
           },
           (_) => {
-            console.log(todoList.todoArray[i]);
-            todoList.todoArray.splice(todoList.todoArray[i], 1);
+            todoList.todoArray.splice(i, 1);
             changed(todoList);
           },
         ),
@@ -236,7 +235,10 @@ class UI {
         // change(new Task(e[]));
       },
       removable,
-      remove,
+      (e) => {
+        remove(e);
+        this.showPopup(null);
+      },
     );
   }
 }
