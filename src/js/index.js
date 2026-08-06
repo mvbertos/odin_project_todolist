@@ -3,45 +3,9 @@ import { Project } from "./project";
 import { Task } from "./task";
 import { TodoList } from "./todo_list";
 import { UI } from "./ui";
+import { save, load } from "./storeData";
 
 const ui = new UI();
-
-const projectArray = [
-  new Project("Pokeman", "", [
-    new TodoList("helloWorld", "Maggot", [
-      new Task("td1", "hello"),
-      new Task("td2", "world"),
-      new Task("td3", "what?"),
-    ]),
-    new TodoList("helloWorld1", "Fox", [
-      new Task("td1", "hello"),
-      new Task("td2", "world"),
-      new Task("td3", "what?"),
-    ]),
-    new TodoList("helloWorld2", "Devil", [
-      new Task("td1", "hello"),
-      new Task("td2", "world"),
-      new Task("td3", "what?"),
-    ]),
-  ]),
-  new Project("PWR", "", [
-    new TodoList("helloWorld", "Maggot", [
-      new Task("td1", "hello"),
-      new Task("td2", "world"),
-      new Task("td3", "what?"),
-    ]),
-    new TodoList("helloWorld1", "Fox", [
-      new Task("td1", "hello"),
-      new Task("td2", "world"),
-      new Task("td3", "what?"),
-    ]),
-    new TodoList("helloWorld2", "Devil", [
-      new Task("td1", "hello"),
-      new Task("td2", "world"),
-      new Task("td3", "what?"),
-    ]),
-  ]),
-];
 
 const content = document.getElementById("content");
 content.className = "content";
@@ -65,7 +29,7 @@ footer.textContent = "made by logout";
 
 content.append(header, todolistDivEl, footer);
 
-function displayTodoList(todoListArray = []) {
+function displayTodoList(todoListArray = [], changed = (td) => {}) {
   todolistDivEl.innerHTML = "";
   buttonReturnEl.addEventListener("click", (_) => {
     displayProject(projectArray);
@@ -79,10 +43,12 @@ function displayTodoList(todoListArray = []) {
         (ntl) => {
           todoListArray[i] = ntl;
           displayTodoList(todoListArray);
+          changed(todoListArray);
         },
         (_) => {
           todoListArray.splice(i, 1);
           displayTodoList(todoListArray);
+          changed(todoListArray);
         },
       ),
     );
@@ -93,6 +59,7 @@ function displayTodoList(todoListArray = []) {
         todoListArray.push(new TodoList(v["Title"], v["Title"]));
         ui.showPopup(null);
         displayTodoList(todoListArray);
+        changed(todoListArray);
       }),
     );
   });
@@ -111,11 +78,17 @@ function displayProject(projectArray = []) {
         (_) => {
           buttonReturnEl.hidden = false;
           headerLabelEl.textContent = e.title;
-          displayTodoList(e.todoListArray);
+          displayTodoList(e.todoListArray, (td) => {
+            e.todoListArray = td;
+            projectArray[i] = e;
+            console.log(projectArray[i]);
+            save("Projects", JSON.stringify(projectArray));
+          });
         },
         (_) => {
           projectArray.splice(i, 1);
           displayProject(projectArray);
+          save("Projects", JSON.stringify(projectArray));
         },
       ),
     );
@@ -132,6 +105,7 @@ function displayProject(projectArray = []) {
         ],
         (v) => {
           projectArray.push(new Project(v["Title"]));
+          save("Projects", JSON.stringify(projectArray));
           displayProject(projectArray);
         },
       ),
@@ -140,4 +114,6 @@ function displayProject(projectArray = []) {
   todolistDivEl.appendChild(addProjectButtonEl);
 }
 
+let loadedData = load("Projects");
+const projectArray = loadedData == null ? [] : loadedData;
 displayProject(projectArray);

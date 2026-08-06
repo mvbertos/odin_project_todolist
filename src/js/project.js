@@ -4,23 +4,7 @@ import { TodoList } from "./todo_list";
 class Project {
   constructor(title = "", desc = "", todoListArray = [new TodoList()]) {
     this.title = title;
-    this._todoListArray = todoListArray;
-  }
-
-  get todoListArray() {
-    return this._todoListArray;
-  }
-
-  removeTodoList(value) {
-    if (Number.isInteger(value)) {
-      if (value < -1) {
-        console.error("invalid index");
-      }
-      this._todoListArray.splice(value, 1);
-    } else {
-      const index = this.getTodoListById(value);
-      this._todoListArray.splice(index, 1);
-    }
+    this.todoListArray = todoListArray;
   }
 
   moveTask(a, b, taID) {
