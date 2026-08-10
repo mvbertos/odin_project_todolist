@@ -2,7 +2,7 @@ import { Todo } from "./task";
 import { TodoList } from "./todo_list";
 
 class Project {
-  constructor(title = "", desc = "", todoListArray = [new TodoList()]) {
+  constructor(title = "", desc = "", todoListArray = []) {
     this.title = title;
     this.todoListArray = todoListArray;
   }

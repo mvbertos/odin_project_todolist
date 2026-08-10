@@ -42,12 +42,10 @@ function displayTodoList(todoListArray = [], changed = (td) => {}) {
         e,
         (ntl) => {
           todoListArray[i] = ntl;
-          displayTodoList(todoListArray);
           changed(todoListArray);
         },
         (_) => {
           todoListArray.splice(i, 1);
-          displayTodoList(todoListArray);
           changed(todoListArray);
         },
       ),
@@ -56,9 +54,8 @@ function displayTodoList(todoListArray = [], changed = (td) => {}) {
   const addTodoButtonEl = ui.createAddButton("Add todolist", (_) => {
     ui.showPopup(
       ui.createForm([{ name: "Title", value: "", type: "Text" }], (v) => {
-        todoListArray.push(new TodoList(v["Title"], v["Title"]));
         ui.showPopup(null);
-        displayTodoList(todoListArray);
+        todoListArray.push(new TodoList(v["Title"], v["Title"]));
         changed(todoListArray);
       }),
     );
@@ -71,17 +68,17 @@ function displayProject(projectArray = []) {
   buttonReturnEl.hidden = true;
   headerLabelEl.textContent = "Projects";
   for (let i = 0; i < projectArray.length; i++) {
-    const e = projectArray[i];
+    const proj = projectArray[i];
     todolistDivEl.appendChild(
       ui.createProjectCard(
-        e.title,
+        proj.title,
         (_) => {
           buttonReturnEl.hidden = false;
-          headerLabelEl.textContent = e.title;
-          displayTodoList(e.todoListArray, (td) => {
-            e.todoListArray = td;
-            projectArray[i] = e;
-            console.log(projectArray[i]);
+          headerLabelEl.textContent = proj.title;
+          displayTodoList(proj.todoListArray, (td) => {
+            proj.todoListArray = td;
+            projectArray[i] = proj;
+            displayTodoList(proj.todoListArray);
             save("Projects", JSON.stringify(projectArray));
           });
         },
