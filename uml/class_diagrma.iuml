@@ -1,0 +1,50 @@
+@startuml
+abstract "Page" as D{
+ void Render()
+}
+
+class "HomePage" as HP
+class "ProjectsPage" as PP 
+class "TasksPage" as TP
+
+interface "IProjectRepo" as IPR{
+ string register(project: Project) //Returns proj id
+ void remove(id:String)
+ array<Project> getRegistry()
+ Project getByID(id:String)
+ void update(project: Project)
+}
+
+interface "ITaskRepo" as ITR{
+ string register(task: Task) //Returns proj id
+ void remove(id:String)
+ array<Task> getRegistry()
+ Task getByID(id:String)
+ void update(task: Task)
+}
+
+class "ProjectRepo" as PR{
+ dictionary<String,Project> registry
+}
+
+class "TaskRepo" as TR{
+ dictionary<String,Task> registry
+}
+
+class "Project" as P
+class "Task" as T
+
+D <|-- HP
+D <|-- PP
+D <|-- TP
+
+PP --> IPR
+TP --> ITR
+
+IPR <|-- PR
+ITR <|-- TR
+
+PR --* P
+TR --* T
+
+@enduml

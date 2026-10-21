@@ -15,6 +15,8 @@ html {
 }
 
 body {
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
   min-height: 100dvh;
 }
 
@@ -25,7 +27,7 @@ body {
   background-color: grey;
 }
 
-.content > header {
+header {
   padding: var(--padding);
   background-color: var(--lightBlue);
   display: grid;
@@ -33,7 +35,7 @@ body {
   gap: var(--gap);
 }
 
-.content > header > button {
+header > button {
   border-radius: 10px;
   padding: 2px;
   background: transparent;
@@ -149,7 +151,7 @@ form footer .add {
   height: min-content;
 }
 
-.content > footer {
+footer {
   padding: var(--padding);
   display: flex;
   align-items: center;

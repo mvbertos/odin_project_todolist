@@ -87,29 +87,6 @@ class UI {
     return formEl;
   }
 
-  createProjectCard(title = "", click = (e) => {}, remove = (e) => {}) {
-    const projCardEl = document.createElement("div");
-    projCardEl.className = "projectCard";
-
-    const titleEl = document.createElement("h2");
-    titleEl.textContent = title;
-    projCardEl.appendChild(titleEl);
-    projCardEl.addEventListener("click", (e) => {
-      click(e);
-    });
-
-    const removeButtonEl = document.createElement("button");
-    removeButtonEl.addEventListener("click", (e) => {
-      e.stopPropagation();
-      remove(e);
-    });
-    removeButtonEl.textContent = "X";
-    removeButtonEl.className = "del";
-    projCardEl.appendChild(removeButtonEl);
-
-    return projCardEl;
-  }
-
   createTodoListCard(
     todoList = new TodoList(),
     changed = (newTodoList) => {},
