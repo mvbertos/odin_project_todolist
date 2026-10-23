@@ -4,6 +4,7 @@ import { popupForm } from "./popup";
 import { Project } from "./project";
 
 class ProjectPage extends Page {
+
   constructor(projectRepo = new ProjectRepo()) {
     super();
     this.projectRepo = projectRepo;
@@ -23,8 +24,13 @@ class ProjectPage extends Page {
       .forEach((proj) => {
         const cardEl = document.createElement("div");
         cardEl.className = "card";
+        cardEl.addEventListener("click", () => {
+          
+        });
+
         const h1EL = document.createElement("h1");
         h1EL.textContent = proj.name;
+
         cardEl.appendChild(h1EL);
         itemListEL.appendChild(cardEl);
       });
@@ -35,6 +41,7 @@ class ProjectPage extends Page {
     createNewEl.addEventListener("click", (e) => {
       this.onCreateNewProjectClickEvent(e);
     });
+
     itemListEL.appendChild(createNewEl);
   }
 
