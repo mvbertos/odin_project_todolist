@@ -2,12 +2,13 @@ import { Page } from "./Page";
 import { ProjectRepo } from "./project_repo";
 import { popupForm } from "./popup";
 import { Project } from "./project";
+import { TaskPage } from "./task_page";
+import { TaskRepo } from "./task_repo";
 
 class ProjectPage extends Page {
-
   constructor(projectRepo = new ProjectRepo()) {
     super();
-    this.projectRepo = projectRepo;
+    this.repo = projectRepo;
   }
 
   render() {
@@ -18,14 +19,15 @@ class ProjectPage extends Page {
     itemListEL.className = "itemList";
     content?.appendChild(itemListEL);
 
-    this.projectRepo
+    this.repo
       .getAll()
-      .values()
-      .forEach((proj) => {
+      .keys()
+      .forEach((id) => {
+        const proj = this.repo.getByID(id);
         const cardEl = document.createElement("div");
         cardEl.className = "card";
-        cardEl.addEventListener("click", () => {
-          
+        cardEl.addEventListener("click", (e) => {
+          this.onCardElClicked(e, proj, id);
         });
 
         const h1EL = document.createElement("h1");
@@ -45,6 +47,36 @@ class ProjectPage extends Page {
     itemListEL.appendChild(createNewEl);
   }
 
+  onCardElClicked(e, project, id) {
+    const tasks = new Map();
+    const tasksID = project.tasksID;
+    let loadedTaskMap = null;
+    try {
+      loadedTaskMap = new Map(JSON.parse(localStorage.tasks));
+      tasksID.forEach((element) => {
+        if (loadedTaskMap.has(element)) {
+          const object = loadedTaskMap.get(element);
+          tasks.set(element, object);
+        }
+      });
+    } catch (e) {
+      loadedTaskMap = new Map();
+      console.warn(
+        "No tasks found on storage, if this project had any task attached to it, it will be ignored for now on.",
+      );
+    }
+
+    const taskPage = new TaskPage(
+      new TaskRepo(tasks, (taskID, task) => {
+        //onTaskRegistered
+        project.tasksID.push(taskID);
+        this.repo.update(id, project);
+      }),
+    );
+
+    taskPage.render();
+  }
+
   onCreateNewProjectClickEvent(e) {
     const popup = popupForm({ name: "text" });
     const form = popup.firstElementChild;
@@ -52,7 +84,7 @@ class ProjectPage extends Page {
     form.addEventListener("submit", (e) => {
       const obj = Object.fromEntries(new FormData(form));
       const name = obj.name;
-      this.projectRepo.register(new Project(obj.name));
+      this.repo.register(new Project(obj.name));
     });
 
     document.body.appendChild(popup);

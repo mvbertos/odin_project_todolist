@@ -1,17 +1,20 @@
 class TaskRepo {
-  constructor(registry = new Map()) {
+  constructor(registry = new Map(), onTaskRegistered = (id, tasks) => {}) {
     this.registry = registry;
+    this.onTaskRegistered = onTaskRegistered;
   }
   register(task) {
-    const id = crypto.randomUUID();
-    this.registry.set(id, task);
     try {
+      const id = crypto.randomUUID();
+      this.registry.set(id, task);
       localStorage.tasks = JSON.stringify(Array.from(this.registry.entries()));
+      this.onTaskRegistered(id, task);
       console.log("task successfully saved");
+      return id;
     } catch (e) {
       throw new Error(e);
     }
-    return id;
+    return -1;
   }
   remove(id) {
     throw new Error("Method not implemented.");
@@ -26,3 +29,4 @@ class TaskRepo {
     throw new Error("Method not implemented.");
   }
 }
+export { TaskRepo };
